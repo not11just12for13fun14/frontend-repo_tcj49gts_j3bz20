@@ -5,6 +5,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "";
 
 export default function JobSearch() {
   const [query, setQuery] = useState("");
+  const [location, setLocation] = useState("");
   const [category, setCategory] = useState("");
   const [jobType, setJobType] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,6 +21,7 @@ export default function JobSearch() {
     try {
       const params = new URLSearchParams();
       if (query) params.set("query", query);
+      if (location) params.set("location", location);
       if (category) params.set("category", category);
       if (jobType) params.set("job_type", jobType);
       const res = await fetch(`${apiBase}/api/jobs?${params.toString()}`);
@@ -48,10 +50,14 @@ export default function JobSearch() {
         </div>
 
         <form onSubmit={runSearch} className="p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
-          <div className="grid md:grid-cols-4 gap-3">
+          <div className="grid md:grid-cols-5 gap-3">
             <div className="relative md:col-span-2">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"><Search size={18} /></div>
               <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="e.g. React, Data Analyst, Product Designer" className="w-full pl-10 pr-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div className="relative">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"><MapPin size={18} /></div>
+              <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location (e.g. London, US, Remote)" className="w-full pl-10 pr-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
             <div>
               <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full px-3 py-3 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white">
@@ -80,7 +86,7 @@ export default function JobSearch() {
             <button type="submit" className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-500 text-white font-medium flex items-center gap-2">
               <Search size={18} /> Search
             </button>
-            <button type="button" onClick={() => {setQuery(""); setCategory(""); setJobType(""); runSearch();}} className="px-4 py-2.5 rounded-lg border border-slate-300/70 dark:border-slate-700/70 text-slate-700 dark:text-slate-200 flex items-center gap-2">
+            <button type="button" onClick={() => {setQuery(""); setLocation(""); setCategory(""); setJobType(""); runSearch();}} className="px-4 py-2.5 rounded-lg border border-slate-300/70 dark:border-slate-700/70 text-slate-700 dark:text-slate-200 flex items-center gap-2">
               <SlidersHorizontal size={18} /> Reset
             </button>
           </div>
